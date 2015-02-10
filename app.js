@@ -19,12 +19,13 @@ var db = Mongoose.createConnection('mongodb:///Applications/meanstack-2.6.7-0/mo
 
 var app = express();
 
-// view engine setup
+// Swig view engine setup
 var swig = require('swig');
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views', path.join(__dirname, '/views'));
 
+// Allows Express to cache templates following initial page load
 app.set('view cache', true);
 
 swig.setDefaults({ cache : false });
