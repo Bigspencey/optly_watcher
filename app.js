@@ -8,9 +8,8 @@ var bodyParser = require('body-parser');
 // Configuring Passport
 var passport = require('passport');
 var expressSession = require('express-session');
-app.use(expressSession({secret: 'mySecretKey'}));
-app.use(passport.initialize());
-app.use(passport.session());
+var initPassport = require('./passport/init'); 
+initPassport(passport);
 
 var routes = require('./routes/index');
 
@@ -35,6 +34,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(expressSession({secret: 'mySecretKey'}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', routes);
 
