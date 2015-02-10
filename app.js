@@ -8,10 +8,13 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-var Mongoose = require('mongoose');
-var db = Mongoose.createConnection('mongodb://USER:PASSWORD@localhost/DATABASE');
+var configuration = require('./config/config');
 
-var db = Mongoose.createConnection('mongodb:///opt/bitnami/mongodb/tmp/mongodb-27017.sock/DATABASE');
+var Mongoose = require('mongoose');
+
+var db = Mongoose.createConnection('mongodb://' + configuration.UserName + ':' + configuration.PassWord + '@localhost/optly_watcher_db');
+
+var db = Mongoose.createConnection('mongodb:///Applications/meanstack-2.6.7-0/mongodb/tmp/mongodb-27017.sock:27017/optly_watcher_db');
 
 var app = express();
 
