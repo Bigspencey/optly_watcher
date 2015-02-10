@@ -20,8 +20,14 @@ var db = Mongoose.createConnection('mongodb:///Applications/meanstack-2.6.7-0/mo
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+var swig = require('swig');
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html');
+app.set('views', path.join(__dirname, '/views'));
+
+app.set('view cache', true);
+
+swig.setDefaults({ cache : false });
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));

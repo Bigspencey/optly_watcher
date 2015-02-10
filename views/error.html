@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block title %}Optly_Watcher{% endblock %}
+
+{% block head %}
+  {% parent %}
+  <!-- CSS/JS Files can go in the head here -->
+{% endblock %}
+
+{% block content %}
+	<h1>{{ message }}</h1>
+	<h2>{{ error.stack }}</h2>
+	<code>{{ error.stack }}</code>
+{% endblock %}
