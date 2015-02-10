@@ -8,10 +8,6 @@ var bodyParser = require('body-parser');
 // Configuring Passport
 var passport = require('passport');
 var expressSession = require('express-session');
-var initPassport = require('./passport/init'); 
-initPassport(passport);
-
-var routes = require('./routes/index');
 
 var configuration = require('./config/config');
 
@@ -39,6 +35,12 @@ app.use(expressSession({secret: 'mySecretKey'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Initializing Passport
+var initPassport = require('./passport/init'); 
+initPassport(passport);
+
+// Below might require (passport) following the require function
+var routes = require('./routes/index');
 app.use('/', routes);
 
 // catch 404 and forward to error handler

@@ -1,6 +1,6 @@
 var LocalStrategy = require('passport-local').Strategy;
-var User = require('../models/user');
-var bCrypt = require('bycrypt-nodejs');
+//var User = require('../models/user');
+var bCrypt = require('bcrypt-nodejs');
 
 module.exports = function(passport){
 
@@ -48,7 +48,7 @@ module.exports = function(passport){
       // Delay the execution of findOrCreateUser and execute 
       // the method in the next tick of the event loop
       process.nextTick(findOrCreateUser);
-    });
+    })
   );
 
   // Generates hash using bCrypt
