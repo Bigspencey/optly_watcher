@@ -26,12 +26,10 @@ module.exports = function(passport){
             // create the user
             var newUser = new User();
             // set the user's local credentials
-            newUser.firstName = req.param('first_name');
             newUser.username = username;
             newUser.password = createHash(password);
-            // Might need to adjust the way we hash below this line.
-            newUser.email = createHash(req.param('email'));
-            newUser.api_key = createHash(req.param('api_key'));
+            newUser.email = createHash(email);
+            newUser.api_key = createHash(api_key);
    
             // save the user
             newUser.save(function(err) {
@@ -53,8 +51,8 @@ module.exports = function(passport){
   );
 
   // Generates hash using bCrypt
-  var createHash = function(password){
-   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+  var createHash = function(string){
+   return bCrypt.hashSync(string, bCrypt.genSaltSync(10), null);
   }
 
 }

@@ -8,5 +8,12 @@
 {% endblock %}
 
 {% block content %}
-	
+	<div id="container">
+		<form action="/signup" method="POST">
+			<input type="text" name="username" placeholder="User Name" required="" autofocus="" class="form-control">
+			<input type="password" name="password" placeholder="Password" required="" autofocus="" class="form-control">
+			<input type="text" name="email" placeholder="E-mail" required="" autofocus="" class="form-control">
+			<input type="text" name="api_key" placeholder="API Key" required="" autofocus="" class="form-control">
+		</form>
+	</div>
 {% endblock %}
