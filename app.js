@@ -30,6 +30,10 @@ app.set('view cache', true);
 
 swig.setDefaults({ cache : false });
 
+// Connect Flash Initialization
+var flash = require('connect-flash');
+app.use(flash());
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
