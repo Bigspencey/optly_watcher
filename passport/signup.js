@@ -8,9 +8,12 @@ module.exports = function(passport){
       passReqToCallback : true
     },
     function(req, username, password, done) {
+      console.log("Outside");
       findOrCreateUser = function(){
+        console.log("inside findOrCreateUser");
         // find a user in Mongo with provided username
         User.findOne({'username':username},function(err, user) {
+          console.log('in findOne');
           // In case of any error return
           if (err){
             console.log('Error in SignUp: '+err);
@@ -22,8 +25,9 @@ module.exports = function(passport){
             return done(null, false, 
                req.flash('message','User Already Exists'));
           } else {
-            // if there is no user with that email
+            // if there is no user with that username
             // create the user
+            console.log("newUser creation");
             var newUser = new User();
             // set the user's local credentials
             newUser.username = username;
