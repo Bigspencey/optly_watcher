@@ -1,3 +1,4 @@
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
 var bCrypt = require('bcrypt-nodejs');
@@ -8,12 +9,10 @@ module.exports = function(passport){
       passReqToCallback : true
     },
     function(req, username, password, done) {
-      console.log("Outside");
+
       findOrCreateUser = function(){
-        console.log("inside findOrCreateUser");
         // find a user in Mongo with provided username
         User.findOne({'username':username},function(err, user) {
-          console.log('in findOne');
           // In case of any error return
           if (err){
             console.log('Error in SignUp: '+err);
@@ -21,8 +20,7 @@ module.exports = function(passport){
           }
           // already exists
           if (user) {
-            console.log('User already exists');
-            return done(null, false, 
+            return done(null, false,
                req.flash('message','User Already Exists'));
           } else {
             // if there is no user with that username
@@ -32,8 +30,8 @@ module.exports = function(passport){
             // set the user's local credentials
             newUser.username = username;
             newUser.password = createHash(password);
-            newUser.email = createHash(email);
-            newUser.api_key = createHash(api_key);
+            newUser.email = createHash(req.body.email);
+            newUser.api_key = createHash(req.body.api_key);
    
             // save the user
             newUser.save(function(err) {
@@ -41,7 +39,7 @@ module.exports = function(passport){
                 console.log('Error in Saving user: '+err);  
                 throw err;  
               }
-              console.log('User Registration succesful');    
+              console.log('User Registration successful');    
               return done(null, newUser);
             });
           }
