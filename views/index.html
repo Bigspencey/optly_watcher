@@ -23,6 +23,12 @@
 					<a href="/signup" class="text-center new-account">Create an account</a>
 					<div id="message"></div>
 				</h1>
+
+			<h2>
+			{% if message %}
+				{{ message }}
+			{% endif %}
+			</h2>
 			</div>
 		</div>
 	</div>

@@ -8,5 +8,8 @@
 {% endblock %}
 
 {% block content %}
-	<h1>You're logged in!</h1>
+	<h1>Welcome, {{user.username}}! You're logged in!</h1>
+	<form  method="GET" action="/signout">
+		<button type="submit" class="btn btn-lg btn-primary btn-block">Log Out</button>
+	</form>
 {% endblock %}

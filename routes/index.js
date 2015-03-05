@@ -12,7 +12,7 @@ module.exports = function(passport){
 
 	/* GET Home Page. */
 	router.get('/', function(req, res) {
-	  res.render('index', { title: 'Optly_Watcher' });
+	  res.render('index', { title: 'Optly_Watcher', message: req.flash('message') });
 	});
 
 	/* Handle Login POST */
