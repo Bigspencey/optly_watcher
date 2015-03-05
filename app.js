@@ -6,8 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var LocalStrategy = require('passport-local').Strategy;
 
-//var nomo = require('node-monkey').start();
-
 // Look at this later per Brad's instructions
 //var env = require('NODE_ENV' + process.env.NODE_ENV);
 
