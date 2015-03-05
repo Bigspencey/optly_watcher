@@ -1,3 +1,4 @@
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
 var bCrypt = require('bcrypt-nodejs');
@@ -8,6 +9,7 @@ module.exports = function(passport){
       passReqToCallback : true
     },
     function(req, username, password, done) {
+
       findOrCreateUser = function(){
         // find a user in Mongo with provided username
         User.findOne({'username':username},function(err, user) {
@@ -18,20 +20,18 @@ module.exports = function(passport){
           }
           // already exists
           if (user) {
-            console.log('User already exists');
-            return done(null, false, 
+            return done(null, false,
                req.flash('message','User Already Exists'));
           } else {
-            // if there is no user with that email
+            // if there is no user with that username
             // create the user
+            console.log("newUser creation");
             var newUser = new User();
             // set the user's local credentials
-            newUser.firstName = req.param('first_name');
             newUser.username = username;
             newUser.password = createHash(password);
-            // Might need to adjust the way we hash below this line.
-            newUser.email = createHash(req.param('email'));
-            newUser.api_key = createHash(req.param('api_key'));
+            newUser.email = createHash(req.body.email);
+            newUser.api_key = req.body.api_key
    
             // save the user
             newUser.save(function(err) {
@@ -39,7 +39,7 @@ module.exports = function(passport){
                 console.log('Error in Saving user: '+err);  
                 throw err;  
               }
-              console.log('User Registration succesful');    
+              console.log('User Registration successful');    
               return done(null, newUser);
             });
           }
@@ -53,8 +53,8 @@ module.exports = function(passport){
   );
 
   // Generates hash using bCrypt
-  var createHash = function(password){
-   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+  var createHash = function(string){
+   return bCrypt.hashSync(string, bCrypt.genSaltSync(10), null);
   }
 
 }

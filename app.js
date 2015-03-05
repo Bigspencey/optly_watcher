@@ -4,6 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var LocalStrategy = require('passport-local').Strategy;
+
+//var nomo = require('node-monkey').start();
+
+// Look at this later per Brad's instructions
+//var env = require('NODE_ENV' + process.env.NODE_ENV);
 
 // Configuring Passport
 var passport = require('passport');
@@ -11,11 +17,9 @@ var expressSession = require('express-session');
 
 var configuration = require('./config/config');
 
+// Mongoose Database Connection
 var Mongoose = require('mongoose');
-
-var db = Mongoose.createConnection('mongodb://' + configuration.UserName + ':' + configuration.PassWord + '@localhost/optly_watcher_db');
-
-var db = Mongoose.createConnection('mongodb:///Applications/meanstack-2.6.7-0/mongodb/tmp/mongodb-27017.sock:27017/optly_watcher_db');
+Mongoose.connect('mongodb://' + configuration.UserName + ':' + configuration.PassWord + '@localhost:27017/optly_watcher_db');
 
 var app = express();
 
@@ -42,6 +46,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// This is apparently deprecated...take a look at it later
 app.use(expressSession({secret: 'mySecretKey'}));
 app.use(passport.initialize());
 app.use(passport.session());
