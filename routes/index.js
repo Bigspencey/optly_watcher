@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var controller = require('../controllers/execute.js');
 
 var isAuthenticated = function(req, res, next){
 	if (req.isAuthenticated()){
@@ -43,6 +44,12 @@ module.exports = function(passport){
 	/* GET Home Page - Handle Unauthenticated Users */
 	router.get('/home', isAuthenticated, function(req, res){
 		res.render('home', { user : req.user });
+	});
+
+	/* GET Execute - Kicks off polling */
+	router.get('/home/success', function(req, res){
+		controller.execute();
+		res.render('home', {message: req.flash('message')}); // Need to potentially review this
 	});
 
 	return router;
