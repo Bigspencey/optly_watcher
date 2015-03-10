@@ -1,7 +1,7 @@
-var api = require('../models/api.js');
+var optimizely_api = require('../models/optimizely_api.js');
 
 var execute = function(){
-	api();
+	optimizely_api();
 	// Call all necessary functions here from Models.
 }
 
