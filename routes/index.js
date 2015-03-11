@@ -13,7 +13,7 @@ module.exports = function(passport){
 
 	/* GET Home Page. */
 	router.get('/', function(req, res) {
-	  res.render('index', { title: 'Optly_Watcher', message: req.flash('message') });
+	  res.render('index', { title: 'Optimizely Notifications', message: req.flash('message') });
 	});
 
 	/* Handle Login POST */
@@ -43,16 +43,9 @@ module.exports = function(passport){
 
 	/* GET Home Page - Handle Unauthenticated Users */
 	router.get('/home', isAuthenticated, function(req, res){
-		console.dir(req.user);
 		controller.execute(req);
 		res.render('home', { user : req.user });
 	});
-
-	// /* GET Execute - Kicks off polling */
-	// router.get('/home/success', function(req, res){
-	// 	controller.execute();
-	// 	res.render('home', {message: req.flash('message')}); // Need to potentially review this
-	// });
 
 	return router;
 }

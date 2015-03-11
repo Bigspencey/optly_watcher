@@ -13,11 +13,11 @@ var LocalStrategy = require('passport-local').Strategy;
 var passport = require('passport');
 var expressSession = require('express-session');
 
-var configuration = require('./config/config');
+var configuration = require('./config/config.js');
 
 // Mongoose Database Connection
 var Mongoose = require('mongoose');
-Mongoose.connect('mongodb://' + configuration.UserName + ':' + configuration.PassWord + '@localhost:27017/optly_watcher_db');
+Mongoose.connect('mongodb://' + configuration.UserName + ':' + configuration.PassWord + '@localhost:27017/optly_notifications_db');
 
 var app = express();
 
