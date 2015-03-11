@@ -7,4 +7,8 @@ var User = mongoose.Schema({
 	api_key: String
 });
 
+User.plugin(passportLocalMongoose,{
+	usernameField: 'email'
+});
+
 module.exports = mongoose.model('User', User);

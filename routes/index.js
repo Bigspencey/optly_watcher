@@ -43,14 +43,16 @@ module.exports = function(passport){
 
 	/* GET Home Page - Handle Unauthenticated Users */
 	router.get('/home', isAuthenticated, function(req, res){
+		console.dir(req.user);
+		controller.execute(req);
 		res.render('home', { user : req.user });
 	});
 
-	/* GET Execute - Kicks off polling */
-	router.get('/home/success', function(req, res){
-		controller.execute();
-		res.render('home', {message: req.flash('message')}); // Need to potentially review this
-	});
+	// /* GET Execute - Kicks off polling */
+	// router.get('/home/success', function(req, res){
+	// 	controller.execute();
+	// 	res.render('home', {message: req.flash('message')}); // Need to potentially review this
+	// });
 
 	return router;
 }
