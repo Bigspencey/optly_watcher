@@ -1,6 +1,5 @@
 var request = require('request');
-var mongoose = require('mongoose');
-var User = require('./user.js');
+var _  = require('underscore');
 
 module.exports = function(req){
 
@@ -15,11 +14,28 @@ var options = {
 
 // Retrieve a list of Projects in your account
 
-request(options, function (error, response, body) {
-	if (!error && response.statusCode === 200) {
-		console.log(body);
-	}
-});
+var retrieveProjectIds = function(callback){
+	var projectIds = [];
+	request(options, function (error, response, body) {
+		if (!error && response.statusCode === 200) {
+			var info = JSON.parse(body);
+			_.each(info, function(item){
+				projectIds.push(item.id);
+			});
+		}
+		callback(projectIds);
+	});
+
+}
+
+var retrieveExperimentIds = function(){
+	retrieveProjectIds(function(projectIds){
+		console.log("inside callback");
+		console.log(projectIds);
+	});
+}
+
+
 
 
 
@@ -30,3 +46,5 @@ request(options, function (error, response, body) {
 // 	console.log(body)
 // 	 	}
 // });
+
+// Must list all projects in an account > List all experiments in a project
