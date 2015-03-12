@@ -14,28 +14,26 @@ var options = {
 
 // Retrieve a list of Projects in your account
 
-var retrieveProjectIds = function(callback){
+var retrieveProjectIds = function(){
 	var projectIds = [];
 	request(options, function (error, response, body) {
 		if (!error && response.statusCode === 200) {
-			var info = JSON.parse(body);
-			_.each(info, function(item){
-				projectIds.push(item.id);
+			var projects = JSON.parse(body);
+			_.each(projects, function(project){
+				projectIds.push(project.id);
 			});
 		}
-		callback(projectIds);
+		retrieveExperimentIds(projectIds);
 	});
 
 }
 
-var retrieveExperimentIds = function(){
-	retrieveProjectIds(function(projectIds){
-		console.log("inside callback");
-		console.log(projectIds);
-	});
+// Retrieve each Projects' list of experiments
+
+var retrieveExperimentIds = function(projectIds){
+	console.log("inside callback");
+	console.log(projectIds);
 }
-
-
 
 
 
