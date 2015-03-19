@@ -12,6 +12,21 @@ var project_options = {
 	}
 }
 
+// var urlBuilder = function(projectIds){
+// 	.each(projectIds, function(id){
+// 		url: 'https://www.optimizelyapis.com/experiment/v1/projects/1416366117/experiments/'
+// 	})
+// 	var experiment_options = {
+
+// 	}
+// }
+var experiment_options = {
+	url: 'https://www.optimizelyapis.com/experiment/v1/projects/1629293960/experiments/',
+	headers: {
+		'Token': req.user.api_key
+	}
+}
+
 // Retrieve a list of Projects in your account
 
 var retrieveProjectIds = function(){
@@ -23,28 +38,36 @@ var retrieveProjectIds = function(){
 				projectIds.push(project.id);
 			});
 		}
+		console.log("project Ids");
 		console.log(projectIds);
 		retrieveExperimentIds(projectIds);
 	});
-
 }
 
 // Retrieve each Projects' list of experiments
 
 var retrieveExperimentIds = function(projectIds){
-	var experiment
-	console.log("inside retrieveExperimentIds");
-	console.log(projectIds);
+	var experimentIds = [];
+	request(experiment_options, function(error, response, body) {
+		if (!error && response.statusCode === 200) {
+			var experiments = JSON.parse(body);
+			_.each(experiments, function(experiment){
+				if (experiment.status === 'Running'){
+					experimentIds.push(experiment.id)
+					console.log('STATUS!!!');
+					console.log(experiment);
+				}
+			});
+		}
+		console.log('experiment ids');
+		console.log(experimentIds);
+	});
 }
 
 retrieveProjectIds()
 
 }
 
-// request('https://www.optimizelyapis.com/experiment/v1/experiments/', function (error, response, body) {
-// 		if (!error && response.statusCode === 200) {
-// 	console.log(body)
-// 	 	}
-// });
-
 // Must list all projects in an account > List all experiments in a project
+
+// Need a module that returns all running 
