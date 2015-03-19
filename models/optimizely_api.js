@@ -5,7 +5,7 @@ module.exports = function(req){
 
 // Retrieve API Token from user session
 
-var options = {
+var project_options = {
 	url: 'https://www.optimizelyapis.com/experiment/v1/projects/',
 	headers: {
 		'Token': req.user.api_key
@@ -16,13 +16,14 @@ var options = {
 
 var retrieveProjectIds = function(){
 	var projectIds = [];
-	request(options, function (error, response, body) {
+	request(project_options, function (error, response, body) {
 		if (!error && response.statusCode === 200) {
 			var projects = JSON.parse(body);
 			_.each(projects, function(project){
 				projectIds.push(project.id);
 			});
 		}
+		console.log(projectIds);
 		retrieveExperimentIds(projectIds);
 	});
 
@@ -31,11 +32,12 @@ var retrieveProjectIds = function(){
 // Retrieve each Projects' list of experiments
 
 var retrieveExperimentIds = function(projectIds){
-	console.log("inside callback");
+	var experiment
+	console.log("inside retrieveExperimentIds");
 	console.log(projectIds);
 }
 
-
+retrieveProjectIds()
 
 }
 
