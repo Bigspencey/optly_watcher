@@ -17,7 +17,7 @@ var configuration = require('./config/config.js');
 
 // Mongoose Database Connection
 var Mongoose = require('mongoose');
-Mongoose.connect('mongodb://' + configuration.UserName + ':' + configuration.PassWord + '@localhost:27017/optly_notifications_db');
+Mongoose.connect('mongodb://' + configuration.UserName + ':' + configuration.PassWord + '@localhost:27017/optly_watcher_db');
 
 var app = express();
 
