@@ -25,48 +25,50 @@ var optionsBuilder = function(projectId){
 	return experiment_options;
 }
 
+// Returns REST API Request
+
+var makeRequest = function(options){
+	request(options, function (error, response, body) {
+		if (!error && response.statusCode === 200) {
+			console.log('in makeRequest')
+			return JSON.parse(body);
+		}
+	});
+}
+
 // Retrieves a list of Active Projects from the Account
 
 var retrieveProjectIds = function(){
 	var projectIds = [];
-	request(project_options, function (error, response, body) {
-		if (!error && response.statusCode === 200) {
-			var projects = JSON.parse(body);
-			_.each(projects, function(project){
-				if (project.project_status === 'Active'){
-					projectIds.push(project.id);
-				}
-			});
+	var projects = makeRequest(project_options);
+	_.each(projects, function(project){
+		if (project.project_status === 'Active'){
+			projectIds.push(project.id);
 		}
-		retrieveExperimentIds(projectIds);
 	});
+	console.log('HERE ARE THE PROJECT IDs' + projectIds)
+	retrieveExperimentIds(projectIds);
 }
 
 // Retrieve a list of experiment ID's from each Project (Experiments must be running)
 
 var retrieveExperimentIds = function(projectIds){
-	var active_entities = {};
+	var projects_with_experiments = {};
 	_.each(projectIds, function(projectId) {
 		var experimentInfo = [];
-		request(optionsBuilder(projectId), function(error, response, body) {
-			if (!error && response.statusCode === 200) {
-				var experiments = JSON.parse(body);
-				_.map(experiments, function(experiment){
-					if (experiment.status === 'Running'){
-						experimentInfo.push(experiment);
-						active_entities[projectId] = experimentInfo
-					}
-				});
+		var experiments = makeRequest(optionsBuilder);
+		_.each(experiments, function(experiment){
+			if (experiment.status === 'Running'){
+				experimentInfo.push(experiment);
+				projects_with_experiments[projectId] = experimentInfo
 			}
-			console.log(active_entities)
 		});
 	});
-	retrieveExperimentResults(active_entities)
+	retrieveExperimentResults(projects_with_experiments)
 }
 
-var retrieveExperimentResults = function(active_entities){
-	console.log("in here")
-	console.log(active_entities);
+var retrieveExperimentResults = function(projects_with_experiments){
+	// Do nothing for the moment
 }
 
 retrieveProjectIds();
@@ -74,6 +76,8 @@ retrieveProjectIds();
 }
 
 // READ THIS!!!!
+
+// NEED TO INSTALL ASYNC MODULE!!!!!!!
 
 // Having trouble returning the last object in the each loop before passing it to retrieveExperimentResults 
 
