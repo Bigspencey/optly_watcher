@@ -6,78 +6,80 @@ module.exports = function(req){
 
 // Retrieve API Token from user session
 
-var project_options = {
-	url: 'https://www.optimizelyapis.com/experiment/v1/projects/',
-	headers: {
-		'Token': req.user.api_key
-	}
-}
-
-// Helper function to build options parameter for API calls
-
-var optionsBuilder = function(projectId){
-	var projectURL = 'https://www.optimizelyapis.com/experiment/v1/projects/' + projectId + '/experiments/'
-	var experiment_options = {
-		url: projectURL,
+	var project_options = {
+		url: 'https://www.optimizelyapis.com/experiment/v1/projects/',
 		headers: {
 			'Token': req.user.api_key
 		}
 	}
-	return experiment_options;
-}
 
+	// Helper function to build options parameter for API calls
 
-async.parallel({
-
-	// Retrieves a list of Active Projects from the Account
-
-	retrieveProjectIds : function(){
-		var projectIds = [];
-		request(project_options, function (error, response, body) {
-			if (!error && response.statusCode === 200) {
-				var projects = JSON.parse(body);
-				_.each(projects, function(project){
-					if (project.project_status === 'Active'){
-						projectIds.push(project.id);
-					}
-				});
+	var optionsBuilder = function(projectId){
+		var projectURL = 'https://www.optimizelyapis.com/experiment/v1/projects/' + projectId + '/experiments/'
+		var experiment_options = {
+			url: projectURL,
+			headers: {
+				'Token': req.user.api_key
 			}
-			retrieveExperimentIds(projectIds);
-		});
-	},
+		}
+		return experiment_options;
+	}
 
-	// Retrieve a list of experiment ID's from each Project (Experiments must be running)
+	async.waterfall([
 
-	retrieveExperimentIds : function(projectIds){
-		var projects_with_experiments = {};
-		_.each(projectIds, function(projectId) {
-			var experimentInfo = [];
-			request(optionsBuilder(projectId), function(error, response, body) {
+		// Retrieves a list of Active Projects from the Account
+
+		retrieveProjectIds = function(callback){
+			var projectIds = [];
+			request(project_options, function (error, response, body) {
 				if (!error && response.statusCode === 200) {
-					var experiments = JSON.parse(body);
-					_.each(experiments, function(experiment){
-						if (experiment.status === 'Running'){
-							experimentInfo.push(experiment);
-							projects_with_experiments[projectId] = experimentInfo
+					var projects = JSON.parse(body);
+					_.each(projects, function(project){
+						if (project.project_status === 'Active'){
+							projectIds.push(project.id);
 						}
 					});
 				}
-				console.log(projects_with_experiments)
+				callback(null, projectIds);
 			});
-		});
-		debugger;
-		retrieveExperimentResults(projects_with_experiments)
-	},
+		},
 
-	retrieveExperimentResults : function(projects_with_experiments){
-		console.log("THE THING: " + projects_with_experiments);
-		return projects_with_experiments
-	}
-},
-function(err, results){
-	console.log("success!!!!!!");
-	console.log(results)
-});
+		// Retrieve a list of experiment ID's from each Project (Experiments must be running)
+
+		retrieveExperimentIds = function(projectIds, callback){
+			var active_entities = {};
+			_.each(projectIds, function(projectId) {
+				var experimentInfo = [];
+				request(optionsBuilder(projectId), function(error, response, body) {
+					if (!error && response.statusCode === 200) {
+						var experiments = JSON.parse(body);
+						_.each(experiments, function(experiment){
+							if (experiment.status === 'Running'){
+								experimentInfo.push(experiment);
+								active_entities[projectId] = experimentInfo
+							}
+						});
+					}
+					console.log(active_entities)
+				});
+			});
+			callback(null, active_entities);
+		}
+
+		// var retrieveExperimentResults = function(active_entities){
+		// 	console.log("in here")
+		// 	console.log(active_entities);
+		// }
+
+		// retrieveProjectIds();
+
+	],
+	function(err) {
+		if (err) {
+			console.log(err);
+		}
+	});
 
 }
 
