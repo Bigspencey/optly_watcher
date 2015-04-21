@@ -65,16 +65,7 @@ module.exports = function(req){
 					}
 				});
 			});
-			// callback(null, active_experiments);
 		}
-
-		// var retrieveExperimentResults = function(active_experiments){
-		// 	console.log("in here")
-		// 	console.log(active_experiments);
-		// }
-
-		// retrieveProjectIds();
-
 	],
 	function(err, results) {
 		if (err) {
@@ -89,13 +80,3 @@ module.exports = function(req){
 // READ THIS!!!!
 
 // Having trouble returning the last object in the each loop before passing it to retrieveExperimentResults 
-
-// Psuedo code for returning running experiments
-
-/*
-  Have an array of project IDs
-  We loop through each project ID in the array making a network request for each.
-  Each network request will return an array of objects with relevant experiment data
-  We then filter out any experiment that isn't "Running".
-  Associate each 
-*/
