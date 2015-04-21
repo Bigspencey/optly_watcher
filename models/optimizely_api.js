@@ -48,37 +48,40 @@ module.exports = function(req){
 		// Retrieve a list of experiment ID's from each Project (Experiments must be running)
 
 		retrieveExperimentIds = function(projectIds, callback){
-			var active_entities = {};
+			var active_experiments = {};
+			var counter = 0;
+			var array_length = projectIds.length;
 			_.each(projectIds, function(projectId) {
-				var experimentInfo = [];
 				request(optionsBuilder(projectId), function(error, response, body) {
 					if (!error && response.statusCode === 200) {
 						var experiments = JSON.parse(body);
-						_.each(experiments, function(experiment){
-							if (experiment.status === 'Running'){
-								experimentInfo.push(experiment);
-								active_entities[projectId] = experimentInfo
-							}
+						active_experiments[projectId] = _.filter(experiments, function(experiment){
+							return experiment.status === 'Running';
 						});
+						if (counter === projectIds.length -1){
+							callback(null, active_experiments);
+						}
+						counter++;
 					}
-					console.log(active_entities)
 				});
 			});
-			callback(null, active_entities);
+			// callback(null, active_experiments);
 		}
 
-		// var retrieveExperimentResults = function(active_entities){
+		// var retrieveExperimentResults = function(active_experiments){
 		// 	console.log("in here")
-		// 	console.log(active_entities);
+		// 	console.log(active_experiments);
 		// }
 
 		// retrieveProjectIds();
 
 	],
-	function(err) {
+	function(err, results) {
 		if (err) {
 			console.log(err);
 		}
+		console.log("INSIDE THE FINAL CALLBACK");
+		console.log(results);
 	});
 
 }
@@ -87,10 +90,12 @@ module.exports = function(req){
 
 // Having trouble returning the last object in the each loop before passing it to retrieveExperimentResults 
 
-// STOP
+// Psuedo code for returning running experiments
 
-// Must list all projects in an account > List all experiments in a project
-
-// Need a module that returns all running experiments
-
-// Have an array of running experiments that 
+/*
+  Have an array of project IDs
+  We loop through each project ID in the array making a network request for each.
+  Each network request will return an array of objects with relevant experiment data
+  We then filter out any experiment that isn't "Running".
+  Associate each 
+*/
