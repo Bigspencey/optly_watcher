@@ -15,7 +15,7 @@ module.exports = function(req){
 
 	// Helper function to build options parameter for API calls
 
-	var optionsBuilder = function(projectId){
+	function optionsBuilder(projectId){
 		var projectURL = 'https://www.optimizelyapis.com/experiment/v1/projects/' + projectId + '/experiments/'
 		var experiment_options = {
 			url: projectURL,
@@ -30,7 +30,7 @@ module.exports = function(req){
 
 		// Retrieves a list of Active Projects from the Account
 
-		retrieveProjectIds = function(callback){
+		function retrieveProjectIds(callback){
 			var projectIds = [];
 			request(project_options, function (error, response, body) {
 				if (!error && response.statusCode === 200) {
@@ -47,7 +47,7 @@ module.exports = function(req){
 
 		// Retrieve a list of experiment ID's from each Project (Experiments must be running)
 
-		retrieveExperimentIds = function(projectIds, callback){
+		function retrieveExperimentIds(projectIds, callback){
 			var active_experiments = {};
 			var counter = 0;
 			var array_length = projectIds.length;
