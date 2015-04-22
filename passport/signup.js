@@ -11,8 +11,10 @@ module.exports = function(passport){
     function(req, username, password, done) {
 
       findOrCreateUser = function(){
+
         // find a user in Mongo with provided username
         User.findOne({'username':username},function(err, user) {
+
           // In case of any error return
           if (err){
             console.log('Error in SignUp: '+err);
@@ -30,7 +32,6 @@ module.exports = function(passport){
             // set the user's local credentials
             newUser.username = username;
             newUser.password = createHash(password);
-            newUser.email = createHash(req.body.email);
             newUser.api_key = req.body.api_key
    
             // save the user
@@ -48,6 +49,7 @@ module.exports = function(passport){
        
       // Delay the execution of findOrCreateUser and execute 
       // the method in the next tick of the event loop
+      console.log('works')
       process.nextTick(findOrCreateUser);
     })
   );

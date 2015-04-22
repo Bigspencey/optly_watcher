@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var controller = require('../controllers/execute.js');
 
 var isAuthenticated = function(req, res, next){
 	if (req.isAuthenticated()){
@@ -12,7 +13,7 @@ module.exports = function(passport){
 
 	/* GET Home Page. */
 	router.get('/', function(req, res) {
-	  res.render('index', { title: 'Optly_Watcher', message: req.flash('message') });
+	  res.render('index', { title: 'Optimizely Notifications', message: req.flash('message') });
 	});
 
 	/* Handle Login POST */
@@ -42,6 +43,7 @@ module.exports = function(passport){
 
 	/* GET Home Page - Handle Unauthenticated Users */
 	router.get('/home', isAuthenticated, function(req, res){
+		controller.execute(req);
 		res.render('home', { user : req.user });
 	});
 
