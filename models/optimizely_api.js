@@ -67,6 +67,8 @@ module.exports = function(req){
 			});
 		}
 	],
+	// Return project IDs that are associated to active experiments
+
 	function(err, results) {
 		if (err) {
 			console.log(err);
@@ -79,4 +81,4 @@ module.exports = function(req){
 
 // READ THIS!!!!
 
-// Having trouble returning the last object in the each loop before passing it to retrieveExperimentResults 
+// Add notes from table.
