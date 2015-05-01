@@ -3,13 +3,34 @@
 {% block title %}Optimizely Notifications{% endblock %}
 
 {% block head %}
-  {% parent %}
-  <!-- CSS/JS Files can go in the head here -->
+	{% parent %}
+  		<!-- CSS/JS Files can go in the head here -->
+  		<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 {% endblock %}
 
 {% block content %}
 	<h1>Welcome, {{user.username}}! You're logged in!</h1>
+	<br>
+	<h3>Please select 3 of your active projects to monitor:</h3>
+	<form method="POST" action="/home">
+		{% for key, value in projects %}
+		<input type="checkbox" name="project" value={{ key }}>{{ value }}<br>
+  		{% endfor %}
+		<button type="submit" class="btn btn-lg btn-primary btn-block">Track</button>
+	</form>
+	<br>
 	<form  method="GET" action="/signout">
 		<button type="submit" class="btn btn-lg btn-primary btn-block">Log Out</button>
 	</form>
+	{% if complete %}
+		<h2>{{ complete }}</h2>
+	{% endif %}
+	<script>
+		var limit = 3;
+		$('input[type="checkbox"]').change(function(evt) {
+			if($(this).siblings(':checked').length >= limit) {
+				this.checked = false;
+			}
+		});
+	</script>
 {% endblock %}
