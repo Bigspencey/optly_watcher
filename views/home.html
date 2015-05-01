@@ -3,8 +3,9 @@
 {% block title %}Optimizely Notifications{% endblock %}
 
 {% block head %}
-  {% parent %}
-  <!-- CSS/JS Files can go in the head here -->
+	{% parent %}
+  		<!-- CSS/JS Files can go in the head here -->
+  		<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -25,4 +26,12 @@
 	<form  method="GET" action="/signout">
 		<button type="submit" class="btn btn-lg btn-primary btn-block">Log Out</button>
 	</form>
+	<script>
+		var limit = 3;
+		$('input[type="checkbox"]').change(function(evt) {
+			if($(this).siblings(':checked').length >= limit) {
+				this.checked = false;
+			}
+		});
+	</script>
 {% endblock %}
