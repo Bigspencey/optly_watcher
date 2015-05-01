@@ -12,20 +12,19 @@
 	<h1>Welcome, {{user.username}}! You're logged in!</h1>
 	<br>
 	<h3>Please select 3 of your active projects to monitor:</h3>
-	<form method="POST" action="/thank_you">
-		{% for project in projects %}
-		{% if loop.first %}{% endif %}
-		<input type="checkbox" name="project" value="" + {{}} +"">{{ project }}<br>
-  		{% if loop.last %}{% endif %}
+	<form method="POST" action="/home">
+		{% for key, value in projects %}
+		<input type="checkbox" name="project" value={{ key }}>{{ value }}<br>
   		{% endfor %}
-		
-
 		<button type="submit" class="btn btn-lg btn-primary btn-block">Track</button>
 	</form>
 	<br>
 	<form  method="GET" action="/signout">
 		<button type="submit" class="btn btn-lg btn-primary btn-block">Log Out</button>
 	</form>
+	{% if complete %}
+		<h2>{{ complete }}</h2>
+	{% endif %}
 	<script>
 		var limit = 3;
 		$('input[type="checkbox"]').change(function(evt) {

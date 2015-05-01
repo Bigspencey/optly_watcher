@@ -51,7 +51,6 @@ module.exports = function(req, callback){
 		if (err) {
 			console.log(err);
 		}
-		console.log(results);
 		callback(results);
 	});
 }

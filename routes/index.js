@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var optimizelyApi = require('../models/optimizely_api.js');
-var async = require('async');
+var User = require('../models/user');
+var _  = require('underscore');
 
 var isAuthenticated = function(req, res, next){
 	if (req.isAuthenticated()){
@@ -51,8 +52,15 @@ module.exports = function(passport){
 
 	/* POST Home Page */
 	router.post('/home', function(req, res){
-
-		res.render('thank_you');
+		User.update({ username: req.user._doc.username }, {
+			project_ids : req.body.project
+		}, function(err){
+			if(err){
+				console.log("error");
+			}
+		});
+		req.flash('message', "You're now registered to receive email notifications!");
+		res.render('home', {complete: req.flash('message')});
 	});
 
 	return router;
